@@ -1,0 +1,61 @@
+flowchart TB
+    subgraph client["Client"]
+        UI["React SPA<br/>Chat + Admin<br/>Azure Static Web Apps"]
+    end
+
+    subgraph edge["Identity and Edge"]
+        ENTRA["Microsoft Entra ID<br/>OIDC / PKCE"]
+    end
+
+    subgraph api["Application Tier - Azure Container Apps"]
+        FASTAPI["FastAPI service<br/>REST v1 + SSE streaming"]
+        subgraph layers["Layered code structure"]
+            ROUTE["api/ routers<br/>Pydantic schemas"]
+            SVC["services/<br/>chat, retrieval, ingestion, admin"]
+            REPO["repositories/<br/>SQLAlchemy + search client"]
+        end
+        WORKER["Ingestion worker<br/>Container Apps Job"]
+    end
+
+    subgraph data["Data Tier"]
+        BLOB["Azure Blob Storage<br/>raw corpus, 24 docs"]
+        SEARCH["Azure AI Search<br/>hybrid + semantic ranker<br/>index: contoso-policies-v1"]
+        PG["PostgreSQL Flexible Server<br/>conversations, messages,<br/>documents, chunks, feedback"]
+    end
+
+    subgraph ai["Model Tier"]
+        EMB["Azure OpenAI<br/>text-embedding-3-large"]
+        GEN["Claude API - Sonnet<br/>generation"]
+        CHEAP["Claude Haiku<br/>query rewrite"]
+    end
+
+    subgraph ops["Platform Services"]
+        KV["Key Vault<br/>secrets"]
+        AI_INS["App Insights<br/>traces, latency, cost"]
+        MI["Managed Identity<br/>RBAC to Search / Blob / KV"]
+    end
+
+    UI -->|"1. auth"| ENTRA
+    ENTRA -->|"2. JWT"| UI
+    UI -->|"3. POST /messages - SSE"| FASTAPI
+    FASTAPI --> ROUTE --> SVC --> REPO
+    SVC -->|"4. condense question"| CHEAP
+    SVC -->|"5. embed query"| EMB
+    REPO -->|"6. hybrid query + rerank"| SEARCH
+    REPO <-->|"7. history, citations"| PG
+    SVC -->|"8. grounded prompt"| GEN
+    GEN -->|"9. streamed tokens"| FASTAPI
+    FASTAPI -->|"10. SSE + citation payload"| UI
+
+    WORKER -->|"read"| BLOB
+    WORKER -->|"embed chunks"| EMB
+    WORKER -->|"upload documents"| SEARCH
+    WORKER -->|"write doc + chunk metadata"| PG
+    FASTAPI -.->|"POST /admin/reindex"| WORKER
+
+    MI -.-> SEARCH
+    MI -.-> BLOB
+    MI -.-> KV
+    FASTAPI -.-> KV
+    FASTAPI -.-> AI_INS
+    WORKER -.-> AI_INS

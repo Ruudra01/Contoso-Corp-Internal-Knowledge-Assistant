@@ -1,0 +1,216 @@
+[
+  {
+    "id": "Q001",
+    "question": "How many PTO days does a full-time employee receive?",
+    "source_documents": [
+      "CNT-HR-005",
+      "CNT-HR-001"
+    ],
+    "expected_answer": "20 days, or 25 beginning with the sixth year after completing five years."
+  },
+  {
+    "id": "Q002",
+    "question": "I have worked at Contoso for six years. How much PTO do I receive annually?",
+    "source_documents": [
+      "CNT-HR-005",
+      "CNT-HR-011"
+    ],
+    "expected_answer": "25 PTO days annually."
+  },
+  {
+    "id": "Q003",
+    "question": "Who approves a five-day PTO request?",
+    "source_documents": [
+      "CNT-HR-019",
+      "CNT-HR-021"
+    ],
+    "expected_answer": "Manager and People Operations approval are required because it exceeds three consecutive business days."
+  },
+  {
+    "id": "Q004",
+    "question": "Can I work remotely five days a week?",
+    "source_documents": [
+      "CNT-WRK-006",
+      "CNT-WRK-012",
+      "CNT-HR-021"
+    ],
+    "expected_answer": "Not automatically. A five-day remote schedule requires department VP and People Operations approval."
+  },
+  {
+    "id": "Q005",
+    "question": "How much is the annual learning reimbursement?",
+    "source_documents": [
+      "CNT-BEN-003",
+      "CNT-HR-014"
+    ],
+    "expected_answer": "Up to $2,500 per calendar year."
+  },
+  {
+    "id": "Q006",
+    "question": "When must a new hire enroll in benefits?",
+    "source_documents": [
+      "CNT-BEN-003",
+      "CNT-HR-011",
+      "CNT-BEN-020"
+    ],
+    "expected_answer": "Within 30 calendar days of the employment start date."
+  },
+  {
+    "id": "Q007",
+    "question": "What is the meal reimbursement limit?",
+    "source_documents": [
+      "CNT-FIN-008"
+    ],
+    "expected_answer": "$75 per person per meal, including tax and tip, unless a lower regional limit applies."
+  },
+  {
+    "id": "Q008",
+    "question": "When must an expense report be submitted after a business trip?",
+    "source_documents": [
+      "CNT-FIN-008",
+      "CNT-FIN-015"
+    ],
+    "expected_answer": "Within 30 calendar days after the trip ends."
+  },
+  {
+    "id": "Q009",
+    "question": "What happens if I submit an expense more than 60 days late?",
+    "source_documents": [
+      "CNT-FIN-016"
+    ],
+    "expected_answer": "Finance Director approval is required."
+  },
+  {
+    "id": "Q010",
+    "question": "Who should handle workplace accommodation requests?",
+    "source_documents": [
+      "CNT-HR-018",
+      "CNT-HR-021"
+    ],
+    "expected_answer": "People Operations; managers should refer employees to People Operations and should not request medical details directly."
+  },
+  {
+    "id": "Q011",
+    "question": "How long must I work before parental leave eligibility?",
+    "source_documents": [
+      "CNT-HR-007"
+    ],
+    "expected_answer": "90 days of continuous service."
+  },
+  {
+    "id": "Q012",
+    "question": "How much paid parental leave is provided?",
+    "source_documents": [
+      "CNT-HR-007"
+    ],
+    "expected_answer": "Up to 8 weeks at 100% of base salary."
+  },
+  {
+    "id": "Q013",
+    "question": "What is the health insurance eligibility threshold?",
+    "source_documents": [
+      "CNT-BEN-004",
+      "CNT-BEN-020"
+    ],
+    "expected_answer": "Full-time employees scheduled for at least 30 hours per week."
+  },
+  {
+    "id": "Q014",
+    "question": "What is the retirement match?",
+    "source_documents": [
+      "CNT-BEN-003"
+    ],
+    "expected_answer": "50% of employee contributions up to 6% of eligible base pay."
+  },
+  {
+    "id": "Q015",
+    "question": "When can I apply for an internal job transfer?",
+    "source_documents": [
+      "CNT-IT-022"
+    ],
+    "expected_answer": "After six months in the current role unless Talent Acquisition approves an exception."
+  },
+  {
+    "id": "Q016",
+    "question": "What should I do if my company laptop is stolen?",
+    "source_documents": [
+      "CNT-SEC-009",
+      "CNT-IT-024"
+    ],
+    "expected_answer": "Report it to IT Security immediately."
+  },
+  {
+    "id": "Q017",
+    "question": "Can I store confidential company data in my personal Google Drive?",
+    "source_documents": [
+      "CNT-SEC-009"
+    ],
+    "expected_answer": "No. Confidential information must not be stored in personal cloud drives."
+  },
+  {
+    "id": "Q018",
+    "question": "What is the remote work allowance?",
+    "source_documents": [
+      "CNT-WRK-006",
+      "CNT-HR-011"
+    ],
+    "expected_answer": "Up to three days per week for eligible employees with manager approval."
+  },
+  {
+    "id": "Q019",
+    "question": "Who gets a referral bonus and how much is it?",
+    "source_documents": [
+      "CNT-HR-013"
+    ],
+    "expected_answer": "Eligible regular employees may receive a $1,500 gross award after the referred employee completes 90 days."
+  },
+  {
+    "id": "Q020",
+    "question": "What is Contoso's policy on cryptocurrency trading by employees?",
+    "source_documents": [
+      "NONE"
+    ],
+    "expected_answer": "The corpus does not contain this information; the assistant must not answer from general knowledge."
+  },
+  {
+    "id": "Q021",
+    "question": "What is the PTO carryover limit?",
+    "source_documents": [
+      "CNT-HR-005"
+    ],
+    "expected_answer": "Up to 5 unused PTO days may carry into the next calendar year."
+  },
+  {
+    "id": "Q022",
+    "question": "Are receipts required for a $30 business meal?",
+    "source_documents": [
+      "CNT-FIN-008",
+      "CNT-FIN-016"
+    ],
+    "expected_answer": "Yes. Receipts are required for expenses of $25 or more."
+  },
+  {
+    "id": "Q023",
+    "question": "What is the probationary period for remote work?",
+    "source_documents": [
+      "CNT-WRK-006"
+    ],
+    "expected_answer": "Employees must complete their first 30 calendar days before being eligible for standard remote work."
+  },
+  {
+    "id": "Q024",
+    "question": "What should a manager do if an employee asks for an accommodation?",
+    "source_documents": [
+      "CNT-HR-018"
+    ],
+    "expected_answer": "Refer the employee to People Operations and do not request medical details directly."
+  },
+  {
+    "id": "Q025",
+    "question": "How long does a performance improvement plan last?",
+    "source_documents": [
+      "CNT-HR-010"
+    ],
+    "expected_answer": "At least 30 calendar days."
+  }
+]

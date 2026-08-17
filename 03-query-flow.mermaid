@@ -1,0 +1,39 @@
+sequenceDiagram
+    autonumber
+    participant U as Employee
+    participant R as React SPA
+    participant F as FastAPI chat service
+    participant P as PostgreSQL
+    participant H as Haiku - rewrite
+    participant E as Azure OpenAI embeddings
+    participant S as Azure AI Search
+    participant G as Claude Sonnet
+
+    U->>R: "How many PTO days carry over?"
+    R->>F: POST /api/v1/conversations/{id}/messages
+    F->>P: load last 6 turns
+    P-->>F: history
+    F->>H: condense history + question into standalone query
+    H-->>F: "PTO carryover limit Contoso policy"
+    F->>E: embed standalone query
+    E-->>F: 3072-dim vector
+    F->>S: hybrid search - BM25 + vector, k=30,<br/>semantic reranker on
+    S-->>F: 30 candidates with rerank scores
+    F->>F: threshold filter, dedupe by doc+section,<br/>keep top 6, order best-last
+
+    alt no chunk above score threshold
+        F-->>R: stream refusal - "not in the knowledge base"
+        F->>P: persist message, refusal reason, 0 citations
+    else grounded path
+        F->>G: system prompt + delimited context + question
+        G-->>F: streamed answer with [C1] [C3] markers
+        F-->>R: SSE tokens then citation payload
+        F->>F: validate every marker maps to a real chunk
+        F->>P: persist message + message_citations + token cost
+    end
+
+    U->>R: clicks citation [C1]
+    R->>F: GET /api/v1/chunks/{chunk_id}
+    F->>P: fetch chunk text, doc title, page, section
+    P-->>F: passage
+    F-->>R: source panel with highlighted passage

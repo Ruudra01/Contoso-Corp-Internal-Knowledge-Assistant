@@ -1,0 +1,26 @@
+flowchart LR
+    A["Blob container<br/>corpus/raw<br/>PDF 10, DOCX 8,<br/>HTML 2, MD 4"] --> B["Loader<br/>format router"]
+
+    B --> B1["PyMuPDF<br/>PDF"]
+    B --> B2["python-docx<br/>DOCX"]
+    B --> B3["BeautifulSoup<br/>HTML"]
+    B --> B4["markdown-it<br/>MD"]
+
+    B1 --> C["Normalize to<br/>Markdown + heading tree<br/>keep page and section anchors"]
+    B2 --> C
+    B3 --> C
+    B4 --> C
+
+    C --> D{"Content hash<br/>changed?"}
+    D -->|"no"| D1["Skip - reuse<br/>existing chunks"]
+    D -->|"yes"| E["Structure-aware chunker<br/>split on H1/H2/H3<br/>target 800 tok, overlap 120"]
+
+    E --> F["Enrich chunk<br/>prepend doc title +<br/>heading breadcrumb"]
+    F --> G["Embed batch<br/>text-embedding-3-large<br/>3072-dim"]
+    G --> H["Upsert to Azure AI Search<br/>id, content, vector,<br/>doc_id, section, page, url"]
+    G --> I["Write chunk rows<br/>PostgreSQL"]
+
+    H --> J["Ingestion run record<br/>status, counts, duration,<br/>token cost"]
+    I --> J
+    D1 --> J
+    J --> K["Admin view<br/>docs + chunk counts<br/>+ re-index button"]

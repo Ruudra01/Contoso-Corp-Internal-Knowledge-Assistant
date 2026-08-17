@@ -1,0 +1,109 @@
+erDiagram
+    USERS ||--o{ CONVERSATIONS : starts
+    USERS ||--o{ FEEDBACK : gives
+    CONVERSATIONS ||--o{ MESSAGES : contains
+    MESSAGES ||--o{ MESSAGE_CITATIONS : cites
+    MESSAGES ||--o| FEEDBACK : rated_by
+    CHUNKS ||--o{ MESSAGE_CITATIONS : referenced_by
+    DOCUMENTS ||--o{ CHUNKS : split_into
+    INGESTION_RUNS ||--o{ DOCUMENT_INGESTIONS : processes
+    DOCUMENTS ||--o{ DOCUMENT_INGESTIONS : appears_in
+
+    USERS {
+        uuid id PK
+        string entra_object_id UK
+        string email
+        string display_name
+        string role "employee | admin"
+        timestamptz created_at
+    }
+
+    CONVERSATIONS {
+        uuid id PK
+        uuid user_id FK
+        string title "auto-generated from first turn"
+        timestamptz created_at
+        timestamptz last_message_at
+        boolean is_archived
+    }
+
+    MESSAGES {
+        uuid id PK
+        uuid conversation_id FK
+        string role "user | assistant"
+        text content
+        string finish_reason "answered | refused_no_context | refused_guardrail | error"
+        string model_name
+        int prompt_tokens
+        int completion_tokens
+        int latency_ms
+        timestamptz created_at
+    }
+
+    DOCUMENTS {
+        uuid id PK
+        string doc_key UK "contoso-hr-pto-policy"
+        string title
+        string source_format "pdf | docx | html | md"
+        string blob_url
+        string content_hash
+        string version_label
+        int chunk_count
+        string status "indexed | pending | failed"
+        timestamptz last_indexed_at
+    }
+
+    CHUNKS {
+        uuid id PK
+        uuid document_id FK
+        int ordinal
+        text content
+        string heading_path "Benefits > PTO > Carryover"
+        int page_start
+        int page_end
+        int token_count
+        string search_doc_id "key in Azure AI Search"
+        timestamptz created_at
+    }
+
+    MESSAGE_CITATIONS {
+        uuid id PK
+        uuid message_id FK
+        uuid chunk_id FK
+        int marker_index "1-based [C1]"
+        float rerank_score
+        int context_position
+    }
+
+    INGESTION_RUNS {
+        uuid id PK
+        uuid triggered_by FK
+        string trigger "manual | scheduled | api"
+        string status "running | succeeded | failed"
+        int docs_total
+        int docs_indexed
+        int docs_skipped
+        int docs_failed
+        int chunks_written
+        int embedding_tokens
+        timestamptz started_at
+        timestamptz finished_at
+    }
+
+    DOCUMENT_INGESTIONS {
+        uuid id PK
+        uuid ingestion_run_id FK
+        uuid document_id FK
+        string outcome "indexed | skipped_unchanged | failed"
+        text error_message
+        int duration_ms
+    }
+
+    FEEDBACK {
+        uuid id PK
+        uuid message_id FK
+        uuid user_id FK
+        int rating "1 up, -1 down"
+        text comment
+        timestamptz created_at
+    }

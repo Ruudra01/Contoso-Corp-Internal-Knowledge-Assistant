@@ -1,0 +1,242 @@
+[
+  {
+    "document_id": "CNT-HR-001",
+    "title": "Employee Handbook",
+    "format": "PDF",
+    "department": "Human Resources",
+    "category": "General HR",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-CO-002",
+    "title": "Code of Conduct",
+    "format": "PDF",
+    "department": "Ethics & Compliance",
+    "category": "Compliance",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-BEN-003",
+    "title": "Benefits Guide 2026",
+    "format": "PDF",
+    "department": "People Operations",
+    "category": "Benefits",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-BEN-004",
+    "title": "Health Insurance Policy",
+    "format": "PDF",
+    "department": "People Operations",
+    "category": "Benefits",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-005",
+    "title": "Paid Time Off Policy",
+    "format": "PDF",
+    "department": "Human Resources",
+    "category": "Leave",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-WRK-006",
+    "title": "Remote Work Policy",
+    "format": "PDF",
+    "department": "Workplace",
+    "category": "Workplace",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-007",
+    "title": "Parental Leave Policy",
+    "format": "PDF",
+    "department": "Human Resources",
+    "category": "Leave",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-FIN-008",
+    "title": "Travel & Expense Policy",
+    "format": "PDF",
+    "department": "Finance",
+    "category": "Finance",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-SEC-009",
+    "title": "Information Security Policy",
+    "format": "PDF",
+    "department": "Information Security",
+    "category": "Security",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-010",
+    "title": "Performance Management Policy",
+    "format": "PDF",
+    "department": "Human Resources",
+    "category": "Performance",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-011",
+    "title": "Employee Handbook Supplement",
+    "format": "DOCX",
+    "department": "Human Resources",
+    "category": "General HR",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-WRK-012",
+    "title": "Flexible Work Arrangement Procedure",
+    "format": "DOCX",
+    "department": "Workplace",
+    "category": "Workplace",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-013",
+    "title": "Employee Referral Policy",
+    "format": "DOCX",
+    "department": "Talent Acquisition",
+    "category": "Recruiting",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-014",
+    "title": "Learning & Development Policy",
+    "format": "DOCX",
+    "department": "People Operations",
+    "category": "Benefits",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-FIN-015",
+    "title": "Business Travel Procedure",
+    "format": "DOCX",
+    "department": "Finance",
+    "category": "Travel",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-FIN-016",
+    "title": "Expense Reimbursement Procedure",
+    "format": "DOCX",
+    "department": "Finance",
+    "category": "Finance",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-017",
+    "title": "New Employee Onboarding Guide",
+    "format": "DOCX",
+    "department": "Human Resources",
+    "category": "Onboarding",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-018",
+    "title": "Workplace Accommodation Procedure",
+    "format": "DOCX",
+    "department": "Human Resources",
+    "category": "HR",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-019",
+    "title": "PTO Request Procedure",
+    "format": "MARKDOWN",
+    "department": "Human Resources",
+    "category": "Leave",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-BEN-020",
+    "title": "Benefits Enrollment FAQ",
+    "format": "MARKDOWN",
+    "department": "People Operations",
+    "category": "Benefits",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-021",
+    "title": "Manager Approval Matrix",
+    "format": "MARKDOWN",
+    "department": "People Operations",
+    "category": "Management",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-IT-022",
+    "title": "Internal Job Transfer Procedure",
+    "format": "HTML",
+    "department": "Talent Acquisition",
+    "category": "Careers",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-HR-023",
+    "title": "Employee Separation Procedure",
+    "format": "HTML",
+    "department": "Human Resources",
+    "category": "Offboarding",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  },
+  {
+    "document_id": "CNT-IT-024",
+    "title": "IT Equipment & Asset Policy",
+    "format": "MARKDOWN",
+    "department": "Information Technology",
+    "category": "IT",
+    "version": "1.0",
+    "effective_date": "2026-01-01",
+    "status": "Active"
+  }
+]
