@@ -27,10 +27,10 @@ def manifest(request) -> list[dict]:
 @pytest.fixture(scope="module")
 def full_run(corpus: Path):
     from app.ingestion.embedder import DeterministicEmbedder
-    from app.ingestion.indexer import InMemoryIndexer
+    from app.search import InMemorySearchStore
 
     embedder = DeterministicEmbedder(dimensions=16)
-    indexer = InMemoryIndexer()
+    indexer = InMemorySearchStore(vector_dimensions=16)
     pipeline = IngestionPipeline(
         settings=IngestionSettings(
             CORPUS_ROOT=corpus, SOURCE_URI_BASE="https://acct.blob.core.windows.net/corpus/raw"
@@ -86,7 +86,7 @@ def test_every_chunk_has_content_and_a_citable_section(full_run) -> None:
     _, _, indexer = full_run
 
     for document in indexer.documents.values():
-        assert document["content"].strip()
+        assert document["chunk_text"].strip()
         assert document["section"] and document["section_path"]
         assert document["source_uri"].startswith("https://acct.blob.core.windows.net/corpus/raw/")
         assert document["token_count"] > 0

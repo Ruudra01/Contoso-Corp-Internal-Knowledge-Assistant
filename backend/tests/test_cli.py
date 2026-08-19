@@ -57,3 +57,35 @@ def test_missing_source_is_reported_not_raised(tmp_path: Path) -> None:
     assert (
         main(["--source", str(tmp_path / "absent"), "--offline", "--log-level", "CRITICAL"]) == 1
     )
+
+
+# -- health check --------------------------------------------------------------
+
+
+def test_check_reports_ready_for_the_offline_store(capsys) -> None:
+    code = main(["--check", "--offline", "--log-level", "CRITICAL"])
+    health = json.loads(capsys.readouterr().out)
+
+    assert code == 0
+    assert health["ready"] is True
+    assert health["index_name"]
+
+
+def test_check_refuses_to_report_ready_without_an_endpoint(monkeypatch, capsys) -> None:
+    """A health check that passes because nothing is configured is worse than none."""
+    monkeypatch.delenv("AZURE_SEARCH_ENDPOINT", raising=False)
+
+    code = main(["--check", "--log-level", "CRITICAL"])
+    health = json.loads(capsys.readouterr().out)
+
+    assert code == 1
+    assert health["ready"] is False
+    assert "AZURE_SEARCH_ENDPOINT" in health["error"]
+
+
+def test_check_indexes_nothing(mini_corpus: Path, capsys) -> None:
+    code = main(["--check", "--offline", "--log-level", "CRITICAL"])
+    health = json.loads(capsys.readouterr().out)
+
+    assert code == 0
+    assert health["document_count"] == 0

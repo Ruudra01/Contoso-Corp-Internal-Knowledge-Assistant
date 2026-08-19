@@ -51,7 +51,13 @@ class AzureSearchSettings(BaseSettings):
     endpoint: str | None = None
     api_key: str | None = None
     index_name: str = "contoso-policies-v1"
-    upload_batch_size: int = Field(default=100, gt=0)
+    # Azure caps an indexing batch at 1000 documents / 16 MB.
+    upload_batch_size: int = Field(default=100, gt=0, le=1000)
+    # Candidate pool per query; solution design 4.2 retrieves 30 and reranks.
+    default_top: int = Field(default=30, gt=0, le=1000)
+    # The semantic ranker is where most of the precision gain comes from on a
+    # corpus this size. Requires a Basic tier or above.
+    use_semantic_ranker: bool = True
 
 
 class IngestionSettings(BaseSettings):

@@ -33,7 +33,7 @@ from app.core.errors import IngestionError
 from app.core.logging import get_logger
 from app.ingestion.chunker import StructureAwareChunker
 from app.ingestion.embedder import Embedder, build_embedder
-from app.ingestion.indexer import Indexer, build_indexer
+from app.search import SearchStore, build_search_store
 from app.ingestion.loaders import loader_for, supported_extensions
 from app.ingestion.models import Chunk, NormalizedDocument
 from app.ingestion.normalizer import normalize
@@ -143,7 +143,7 @@ class IngestionPipeline:
         *,
         settings: IngestionSettings | None = None,
         embedder: Embedder | None = None,
-        indexer: Indexer | None = None,
+        indexer: SearchStore | None = None,
         chunker: StructureAwareChunker | None = None,
         offline: bool = False,
     ) -> None:
@@ -155,7 +155,7 @@ class IngestionPipeline:
             max_tokens=chunking.max_tokens,
         )
         self.embedder = embedder or build_embedder(self.settings.openai, offline=offline)
-        self.indexer = indexer or build_indexer(
+        self.indexer = indexer or build_search_store(
             self.settings.search,
             vector_dimensions=self.embedder.dimensions,
             offline=offline,
@@ -167,6 +167,7 @@ class IngestionPipeline:
         *,
         force: bool = False,
         dry_run: bool = False,
+        update_index: bool = False,
     ) -> IngestionReport:
         started = time.perf_counter()
         documents = list(paths) if paths is not None else discover_documents(self.settings.corpus_root)
@@ -185,7 +186,7 @@ class IngestionPipeline:
         )
 
         if not dry_run:
-            self.indexer.ensure_index()
+            self.indexer.ensure_index(allow_update=update_index)
         known_hashes = {} if force else self._known_hashes(dry_run=dry_run)
 
         for path in documents:
@@ -272,7 +273,7 @@ class IngestionPipeline:
 
             tokens_before = getattr(self.embedder, "total_tokens", 0)
             self._embed(chunks)
-            written = self.indexer.upsert(chunks)
+            written = self._upsert(meta.document_id, chunks)
             deleted = self._prune(meta.document_id, chunks)
 
             base.outcome = Outcome.INDEXED
@@ -323,6 +324,23 @@ class IngestionPipeline:
         for chunk, vector in zip(chunks, vectors, strict=True):
             chunk.embedding = vector
 
+    def _upsert(self, document_id: str, chunks: Sequence[Chunk]) -> int:
+        """Write chunks, treating any rejected document as a document failure.
+
+        A partially indexed document is worse than a skipped one: it would answer
+        queries from half its sections while reporting success. So a partial
+        failure raises, the document is recorded as failed, and the previous
+        version stays in the index untouched.
+        """
+        result = self.indexer.upsert(chunks)
+        if result.failed:
+            first = result.failed[0]
+            raise IngestionError(
+                f"{result.failed_count}/{len(chunks)} chunks rejected by the index; "
+                f"first: {first.chunk_id} {first.error_message}"
+            )
+        return result.succeeded_count
+
     def _prune(self, document_id: str, chunks: Sequence[Chunk]) -> int:
         """Remove chunks this document produced on a previous, longer run."""
         current = {c.chunk_id for c in chunks}
@@ -333,4 +351,12 @@ class IngestionPipeline:
             "deleting stale chunks",
             extra={"document_id": document_id, "count": len(stale)},
         )
-        return self.indexer.delete(sorted(stale))
+        result = self.indexer.delete(sorted(stale))
+        if result.failed:
+            # Stale chunks left behind are a correctness problem: they keep
+            # answering queries from withdrawn content.
+            logger.error(
+                "could not delete every stale chunk",
+                extra={"document_id": document_id, **result.summary()},
+            )
+        return result.succeeded_count

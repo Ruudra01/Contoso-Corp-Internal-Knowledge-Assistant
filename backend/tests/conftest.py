@@ -7,7 +7,7 @@ import pytest
 from app.core.logging import configure_logging
 from app.ingestion.chunker import StructureAwareChunker
 from app.ingestion.embedder import DeterministicEmbedder
-from app.ingestion.indexer import InMemoryIndexer
+from app.search import InMemorySearchStore
 
 CORPUS = Path(__file__).resolve().parents[2] / "data"
 
@@ -51,5 +51,6 @@ def embedder() -> DeterministicEmbedder:
 
 
 @pytest.fixture
-def indexer() -> InMemoryIndexer:
-    return InMemoryIndexer()
+def indexer() -> InMemorySearchStore:
+    # Dimensions match the `embedder` fixture so vector queries validate.
+    return InMemorySearchStore(vector_dimensions=32)

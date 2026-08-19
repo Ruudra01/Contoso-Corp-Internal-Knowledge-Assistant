@@ -11,7 +11,7 @@ import pytest
 from app.core.config import ChunkingSettings, IngestionSettings
 from app.core.errors import IndexingError, IngestionError
 from app.ingestion.embedder import DeterministicEmbedder
-from app.ingestion.indexer import InMemoryIndexer
+from app.search import InMemorySearchStore
 from app.ingestion.pipeline import (
     IngestionPipeline,
     Outcome,
@@ -92,8 +92,8 @@ def test_indexed_documents_carry_metadata_and_vectors(pipeline, one_of_each, ind
         assert document["document_type"] in {"pdf", "docx", "html", "markdown"}
         assert document["section"] and document["section_path"]
         assert document["source_uri"].startswith("https://blob/corpus/raw/")
-        assert document["content"].strip()
-        assert len(document["content_vector"]) == embedder.dimensions
+        assert document["chunk_text"].strip()
+        assert len(document["embedding"]) == embedder.dimensions
 
 
 def test_page_number_is_populated_only_for_paginated_formats(pipeline, one_of_each, indexer) -> None:
@@ -152,7 +152,7 @@ def test_edited_document_is_reindexed(pipeline, tmp_path: Path, indexer) -> None
     second = pipeline.run([path])
 
     assert second.docs_indexed == 1
-    assert "10 days" in indexer.documents["CNT-HR-900-0000"]["content"]
+    assert "10 days" in indexer.documents["CNT-HR-900-0000"]["chunk_text"]
 
 
 def test_dry_run_touches_neither_embedder_nor_index(pipeline, one_of_each, indexer, embedder) -> None:
@@ -192,7 +192,7 @@ def test_shrinking_document_has_its_stale_chunks_deleted(
     assert second.chunks_written == 1
     assert second.chunks_deleted == first.chunks_written - 1
     assert set(indexer.documents) == {"CNT-HR-900-0000"}
-    assert "withdrawn" in indexer.documents["CNT-HR-900-0000"]["content"]
+    assert "withdrawn" in indexer.documents["CNT-HR-900-0000"]["chunk_text"]
 
 
 def test_growing_document_keeps_every_chunk(embedder, indexer, tmp_path: Path) -> None:
@@ -267,13 +267,13 @@ def test_embedding_failure_leaves_the_previous_version_indexed(
 
     assert report.docs_failed == 1
     assert "unavailable" in report.results[0].error
-    assert "Original text." in indexer.documents["CNT-HR-900-0000"]["content"]
+    assert "Original text." in indexer.documents["CNT-HR-900-0000"]["chunk_text"]
 
 
 def test_run_aborts_when_prior_state_cannot_be_read(embedder, tmp_path: Path) -> None:
     """Silently defaulting to an empty hash map would re-embed the whole corpus."""
 
-    class _UnreadableIndexer(InMemoryIndexer):
+    class _UnreadableIndexer(InMemorySearchStore):
         def existing_hashes(self):
             raise IndexingError("search service unreachable")
 
@@ -374,7 +374,7 @@ def test_chunk_size_configuration_changes_pipeline_output(embedder, tmp_path: Pa
                 ),
             ),
             embedder=embedder,
-            indexer=InMemoryIndexer(),
+            indexer=InMemorySearchStore(vector_dimensions=32),
         )
 
     small = build(200, 20, 250)
